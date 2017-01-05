@@ -1,34 +1,36 @@
 <!DOCTYPE>
 <html>
     <head>
+        <title>BudgetApp</title>
         <link rel="stylesheet" type="text/css"  href="css/bootstrap.css">   
         <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
     <body>
-        h3>Bills</h3>
+        <h3>Next Pay Date</h3>
+        Pay Date: <input type="date" data-bind="value: payDay"><br>
+        <button data-bind="click: getWeekRange">Week Range</button>
+
+        <h3>Bills</h3>
 
         <p>Add New Bill</p>
         Name: <input data-bind="value: bill.name"><br>
         Due Date: <input type="date" data-bind = "value: bill.dueDate"><br>
         Amount: <input data-bind="value: bill.amount"><br>
-        <button data-bind="click: addBill">Add New Bill</button><br>
-        <button data-bind="click: getDay">Day Due</button>
+        <button data-bind="click: addBill">Add New Bill</button><br>       
 
         <table class="table table-responsive">
             <thead>
                 <tr>
                     <td>Name</td>
                     <td>Due Date</td>
-                    <td>Amount</td>
-                    <td>Day Due</td>
+                    <td>Amount</td>                   
                 </tr>
             </thead>
             <tbody data-bind="foreach: Bills">
                 <tr>
                     <td data-bind="text: Name"></td>
                     <td data-bind="text: DueDate"></td>
-                    <td data-bind="text: Amount"></td>
-                    <td data-bind="text: dayDue"></td>
+                    <td data-bind="text: Amount"></td>                   
                 </tr>
             </tbody>
         </table>
