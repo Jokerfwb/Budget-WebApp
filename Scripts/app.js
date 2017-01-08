@@ -1,53 +1,28 @@
-function Bill (data) {
-    this.Name = ko.observable(data.name);
-    this.DueDate = ko.observable(data.dueDate);
-    this.Amount = ko.observable(data.amount);
-}
-function BudgetItem(item) {   
-    this.WeekOf = ko.observable(item.startDate)
-    this.Bills = ko.observableArray([
-        {
-            BillName: ko.observable(item.name),
-            BillDueDate: ko.observable(item.dueDate),
-            BillAmount: ko.observable(item.amount)
-        },
-    ])
-}
-
 var ViewModel = function() {
     var self = this;
 
-    self.Bills = ko.observableArray([]);
-    self.budget = ko.observableArray([
-        {
-            WeekOf: ko.observable(),
-            Bills: ko.observableArray([])
-        }
-    ]);
+    self.bills = ko.observableArray([]);
+    self.budget = ko.observableArray([]);
     self.weekRange = ko.observableArray([]);
     self.payFrequency = ko.observable();
     self.payDay = ko.observable("2016-12-30");
-    self.bill = {
-  	    name : ko.observable(" "),
-        dueDate: ko.observable("2017-01-01"),        
-        amount: ko.observable(" ")
-    };
+    self.bill = new bill();
   
     self.addBill = function () {
         var x = ko.toJS(self.bill);
-        self.Bills.push(new Bill(x));
-        self.resetForm();
-        console.log(self.Bills());
+        self.bills.push(new bill(x));
+        self.resetForm();        
     }
 
     self.getBills = function () {
         for (var i = 0; i < myBills.length; i++) {
-            var x = new Bill(myBills[i]);
-            self.Bills.push(x);
+            var x = new bill(myBills[i]);
+            self.bills.push(x);
         }
     }
 
-    self.getWeekRange = function () {        
+    self.getWeekRange = function () {  
+        self.weekRange.removeAll();      
         var a = moment(self.payDay()).format('YYYY-MM-DD');
         self.weekRange.push(a);
         for (var i = 0; i < 48; i++) {
@@ -58,23 +33,29 @@ var ViewModel = function() {
     }
 
     self.setBudget = function () {
-        for (var i = 0; i < self.weekRange().length; i++) {
-
-            var startDate = moment(self.weekRange()[i]);
+        self.budget.removeAll();
+        for (var i = 0; i < self.weekRange().length; i++) {            
+            var weekOf = self.weekRange()[i];
+            var startDate = moment(weekOf);
             var endDate = moment(self.weekRange()[i + 1]);
-            self.budget()[i].WeekOf(self.weekRange()[i]);
 
-            for (var j = 0; j < self.Bills().length; j++) {
-                var date = moment(self.Bills()[j].DueDate());
-
-                if (date.isBetween(startDate, endDate, null, '[)')) {                    
-
-                    self.budget()[i].Bills.push(self.Bills()[j]);
+            var thisWeeksBill = new weeklyBill();
+            thisWeeksBill.startOfWeek(weekOf);       
+        
+            for (var j = 0; j < self.bills().length; j++) {
+                var date = moment(self.bills()[j].dueDate());
+                
+                if (date.isBetween(startDate, endDate, null, '[)')) {  
+                    var jsBill= ko.toJS(self.bills()[j]);
+                    thisWeeksBill.weeklyBills().push(new bill(jsBill));                   
+                    self.bills()[j].dueDate(date.add(1, 'months').format("YYYY-MM-DD"))                     
                 }
             }
-            console.log(ko.toJS(self.budget()))
+            thisWeeksBill.weeklyAmount(totalWeeklyBills(thisWeeksBill));
+            self.budget().push(thisWeeksBill);             
+                    
         }
-        console.log(ko.toJS(self.budget()));
+        console.log(self.budget());
     }
 
     self.resetForm = function () {
@@ -82,8 +63,32 @@ var ViewModel = function() {
         self.bill.dueDate("2017-01-01")
         self.bill.amount(" ");
     }
+}
 
-    self.getBills();
+function bill (data) {
+    if(!data){
+        this.name = ko.observable();
+        this.dueDate = ko.observable('2017-01-01');
+        this.amount = ko.observable();
+    } else {
+        this.name = ko.observable(data.name);
+        this.dueDate = ko.observable(data.dueDate);
+        this.amount = ko.observable(data.amount);
+    }
+}
+
+function weeklyBill(){
+    this.startOfWeek = ko.observable();
+    this.weeklyBills = ko.observableArray([]);
+    this.weeklyAmount = ko.observable();
+}
+
+function totalWeeklyBills(x) {
+    var weeklyAmount = 0;
+    for(var i = 0; i < x.weeklyBills().length; i++) {
+        weeklyAmount += Number(x.weeklyBills()[i].amount());
+    }
+    return weeklyAmount
 }
 
 var myBills = [

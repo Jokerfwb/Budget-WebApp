@@ -17,6 +17,7 @@
     Due Date: <input type="date" data-bind="value: bill.dueDate"><br>
     Amount: <input data-bind="value: bill.amount"><br>
     <button data-bind="click: addBill">Add New Bill</button><br>
+    <button data-bind="click: getBills">Get Bills</button>
     <button data-bind="click: setBudget">Set Budget</button>
 
     <table class="table table-responsive">
@@ -27,19 +28,33 @@
                 <td>Amount</td>
             </tr>
         </thead>
-        <tbody data-bind="foreach: Bills">
+        <tbody data-bind="foreach: bills">
             <tr>
-                <td data-bind="text: Name"></td>
-                <td data-bind="text: DueDate"></td>
-                <td data-bind="text: Amount"></td>
+                <td data-bind="text: name"></td>
+                <td data-bind="text: dueDate"></td>
+                <td data-bind="text: amount"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <td>Week Of</td>            
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: budget">
+            <tr>
+                <td data-bind="textinput: startOfWeek"></td>
             </tr>
         </tbody>
     </table>
 
 
+
     <script src="scripts/jquery-3.1.1.js"></script>
     <script src="scripts/bootstrap.js"></script>
-    <script src="scripts/knockout-3.4.1.js"></script>
+    <script src="scripts/knockout-3.4.1.debug.js"></script>
     <script src="scripts/moment.js"></script>
     <script src="scripts/app.js"></script>
 
