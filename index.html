@@ -37,18 +37,16 @@
         </tbody>
     </table>
 
-    <table class="table table-responsive">
-        <thead>
-            <tr>
-                <td>Week Of</td>            
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: budget">
-            <tr>
-                <td data-bind="textinput: startOfWeek"></td>
-            </tr>
-        </tbody>
-    </table>
+    <ul data-bind="foreach: budget">
+        <li data-bind="text: startOfWeek">
+        <li data-bind="text: weeklyAmount"></li>
+            <ul data-bind="foreach: weeklyBills">
+                <li data-bind="text: name"></li>
+                <li data-bind="text: dueDate"></li>
+                <li data-bind="text: amount"></li><br>
+            </ul>
+        </li>
+    </uld>
 
 
 

@@ -27,7 +27,7 @@ var ViewModel = function() {
         self.weekRange.push(a);
         for (var i = 0; i < 48; i++) {
             a = moment(a).add(7, 'days').format('YYYY-MM-DD');
-            self.weekRange().push(a);
+            self.weekRange.push(a);
         }
         console.log(self.weekRange());
     }
@@ -47,12 +47,12 @@ var ViewModel = function() {
                 
                 if (date.isBetween(startDate, endDate, null, '[)')) {  
                     var jsBill= ko.toJS(self.bills()[j]);
-                    thisWeeksBill.weeklyBills().push(new bill(jsBill));                   
+                    thisWeeksBill.weeklyBills.push(new bill(jsBill));                   
                     self.bills()[j].dueDate(date.add(1, 'months').format("YYYY-MM-DD"))                     
                 }
             }
             thisWeeksBill.weeklyAmount(totalWeeklyBills(thisWeeksBill));
-            self.budget().push(thisWeeksBill);             
+            self.budget.push(thisWeeksBill);             
                     
         }
         console.log(self.budget());
