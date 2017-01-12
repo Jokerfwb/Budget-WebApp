@@ -11,6 +11,7 @@ var ViewModel = function() {
     self.addBill = function () {
         var x = ko.toJS(self.bill);
         self.bills.push(new bill(x));
+        console.log(self.bills());
         self.resetForm();        
     }
 
@@ -34,6 +35,7 @@ var ViewModel = function() {
 
     self.setBudget = function () {
         self.budget.removeAll();
+        console.log(self.bills());
         for (var i = 0; i < self.weekRange().length; i++) {            
             var weekOf = self.weekRange()[i];
             var startDate = moment(weekOf);

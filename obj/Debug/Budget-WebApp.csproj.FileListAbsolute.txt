@@ -1,0 +1,6 @@
+G:\Projects\Budget-WebApp\bin\Budget-WebApp.dll.config
+G:\Projects\Budget-WebApp\bin\Budget-WebApp.dll
+G:\Projects\Budget-WebApp\bin\Budget-WebApp.pdb
+G:\Projects\Budget-WebApp\obj\Debug\Budget-WebApp.csprojResolveAssemblyReference.cache
+G:\Projects\Budget-WebApp\obj\Debug\Budget-WebApp.dll
+G:\Projects\Budget-WebApp\obj\Debug\Budget-WebApp.pdb
