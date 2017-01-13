@@ -1,4 +1,7 @@
-var ViewModel = function() {
+
+//Test of Git
+
+var ViewModel = function () {
     var self = this;
 
     self.bills = ko.observableArray([]);
