@@ -4,6 +4,8 @@
 var ViewModel = function () {
     var self = this;
 
+
+    self.weeklyIncome = ko.observable(670.00);
     self.bills = ko.observableArray([]);
     self.budget = ko.observableArray([]);
     self.weekRange = ko.observableArray([]);
@@ -86,6 +88,10 @@ function weeklyBill(){
     this.startOfWeek = ko.observable();
     this.weeklyBills = ko.observableArray([]);
     this.weeklyAmount = ko.observable();
+}
+
+function monthlyBudget() {
+    this.totalMonthlyAmount = ko.observalbe()
 }
 
 function totalWeeklyBills(x) {

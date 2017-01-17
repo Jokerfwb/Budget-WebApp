@@ -6,47 +6,96 @@
         <link rel="stylesheet" type="text/css" href="css/style.css">
     </head>
 <body>
-    <h3>Next Pay Date</h3>
-    Pay Date: <input type="date" data-bind="value: payDay"><br>
-    <button data-bind="click: getWeekRange">Week Range</button>
+    <header class="container-fluid text-center">
+        <h1>Budget App</h1>
+    </header>
 
-    <h3>Bills</h3>
+    <section class="container-fluid">
+        <div class="row">
+            <div class="col-md-1"></div>
 
-    <p>Add New Bill</p>
-    Name: <input data-bind="value: bill.name"><br>
-    Due Date: <input type="date" data-bind="value: bill.dueDate"><br>
-    Amount: <input data-bind="value: bill.amount"><br>
-    <button data-bind="click: addBill">Add New Bill</button><br>
-    <button data-bind="click: getBills">Get Bills</button>
-    <button data-bind="click: setBudget">Set Budget</button>
+            <div class="col-md-4">
+                <div class="text-center">
+                    <h3>Bills</h3>
+                </div>
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><strong>Add New Bill</strong></div>
+                        <div class="panel-body">
+                            <div class="col-md-4">
+                                <label for="Name">Name: </label>
+                                <input name="Name" data-bind="value: bill.name">
+                            </div>
 
-    <table class="table table-responsive">
-        <thead>
-            <tr>
-                <td>Name</td>
-                <td>Due Date</td>
-                <td>Amount</td>
-            </tr>
-        </thead>
-        <tbody data-bind="foreach: bills">
-            <tr>
-                <td data-bind="text: name"></td>
-                <td data-bind="text: dueDate"></td>
-                <td data-bind="text: amount"></td>
-            </tr>
-        </tbody>
-    </table>
+                            <div class="col-md-4">
+                                <label for="DueDate">Name: </label>
+                                <input name="DueDate" type="date" data-bind="value: bill.dueDate">
+                            </div>
 
-    <ul data-bind="foreach: budget">
-        <li data-bind="text: startOfWeek">
-        <li data-bind="text: weeklyAmount"></li>
-            <ul data-bind="foreach: weeklyBills">
-                <li data-bind="text: name"></li>
-                <li data-bind="text: dueDate"></li>
-                <li data-bind="text: amount"></li><br>
-            </ul>
-        </li>
-    </uld>
+                            <div class="col-md-4">
+                                <label for="Amount">Amount: </label>
+                                <input name="Amount" data-bind="value: bill.amount">
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <button data-bind="click: addBill">Add New Bill</button>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <strong>Current Bills</strong>
+                        </div>
+                        <div class="panel-body scrollable">
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>Due Date</td>
+                                        <td>Amount</td>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: bills">
+                                    <tr>
+                                        <td data-bind="text: name"></td>
+                                        <td data-bind="text: dueDate"></td>
+                                        <td data-bind="text: amount"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel-footer">
+                            <button data-bind="click: getBills">Get Bills</button>
+                        </div>
+                    </div>
+                </div>
+
+               
+            </div>
+
+            <div class="col-md-6">
+                <h3>Next Pay Date</h3>
+                Pay Date: <input type="date" data-bind="value: payDay"><br>
+                <button data-bind="click: getWeekRange">Week Range</button>
+                <button data-bind="click: setBudget">Set Budget</button>
+
+
+                <ul data-bind="foreach: budget">
+                    <li data-bind="text: startOfWeek">
+                    <li data-bind="text: weeklyAmount"></li>
+                    <ul data-bind="foreach: weeklyBills">
+                        <li data-bind="text: name"></li>
+                        <li data-bind="text: dueDate"></li>
+                        <li data-bind="text: amount"></li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="col-md-1"></div>
+        </div>
+    </section>
+   
+   
 
 
 
