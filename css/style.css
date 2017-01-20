@@ -1,4 +1,15 @@
+body {
+    padding: 0px 20px 0px 20px;
+}
 .scrollable {
     max-height: 500px;
     overflow-y: scroll;    
+}
+
+.currency {
+    width: 75px;
+}
+
+.date {
+    width: 135px;
 }

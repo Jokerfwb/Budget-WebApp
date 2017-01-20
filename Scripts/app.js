@@ -4,12 +4,12 @@
 var ViewModel = function () {
     var self = this;
 
-
+    self.income = ko.observable();
+    self.payFrequency = ko.observable('weekly');
     self.weeklyIncome = ko.observable(670.00);
     self.bills = ko.observableArray([]);
     self.budget = ko.observableArray([]);
     self.weekRange = ko.observableArray([]);
-    self.payFrequency = ko.observable();
     self.payDay = ko.observable("2016-12-30");
     self.bill = new bill();
   
