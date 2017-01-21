@@ -105,6 +105,50 @@
                     </div>
                 </div>-->
 
+                <section data-bind="foreach: budget">
+                    <div class="panel panel-default" >
+                        <div class="panel-heading">
+                            <strong data-bind="text: startOfWeek"></strong>
+                            <span data-bind="text: weeklyAmount"></span>
+                        </div>
+                        <div class="panel-body">
+
+                            <table class="table table-responsive small">
+                                <thead>
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>Due Date</td>
+                                        <td>Amount</td>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="foreach: weeklyBills">
+                                    <tr>
+                                        <td data-bind="text: name"></td>
+                                        <td data-bind="text: dueDate"></td>
+                                        <td data-bind="text: amount"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="panel-footer">
+                            <span>Testing footer</span>
+                        </div>
+                    </div>
+                </section>
+
+
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <strong>Monthly Budget</strong>
+                    </div>
+                    <div class="panel-body">
+                        Total Monthly Bills: <span data-bind="text: totalMonthlyAmount"></span><br>
+                        Total Monthly Income: <span data-bind="text: monthlyIncome"></span>
+                    </div>
+                    <div class="panel-footer">
+                    
+                    </div>
+                    </div>
 
                 <div class="panel panel-default">
                     <div class="panel-heading">

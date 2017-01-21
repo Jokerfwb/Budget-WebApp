@@ -4,7 +4,13 @@
 var ViewModel = function () {
     var self = this;
 
-    self.income = ko.observable();
+    
+
+    self.income = ko.observable(0);
+    self.monthlyIncome = ko.computed(function() {
+    return ((Number(self.income()) * 52)/12).toFixed(2);
+    })
+
     self.payFrequency = ko.observable('weekly');
     self.weeklyIncome = ko.observable(670.00);
     self.bills = ko.observableArray([]);
@@ -12,6 +18,14 @@ var ViewModel = function () {
     self.weekRange = ko.observableArray([]);
     self.payDay = ko.observable("2016-12-30");
     self.bill = new bill();
+
+    self.totalMonthlyAmount = ko.computed(function() {
+        var total = 0;
+        for (var i = 0; i < self.bills().length; i++) {
+            total = total + Number(self.bills()[i].amount());
+        }
+        return total;
+    })
   
     self.addBill = function () {
         var x = ko.toJS(self.bill);
@@ -62,7 +76,7 @@ var ViewModel = function () {
             self.budget.push(thisWeeksBill);             
                     
         }
-        console.log(self.budget());
+        console.log(ko.toJS(self.budget()));
     }
 
     self.resetForm = function () {
@@ -90,9 +104,9 @@ function weeklyBill(){
     this.weeklyAmount = ko.observable();
 }
 
-function monthlyBudget() {
-    this.totalMonthlyAmount = ko.observalbe()
-}
+// function monthlyBudget() {
+//     this.totalMonthlyAmount = ko.observalbe()
+// }
 
 function totalWeeklyBills(x) {
     var weeklyAmount = 0;
