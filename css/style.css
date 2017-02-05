@@ -2,7 +2,7 @@ body {
     padding: 0px 20px 0px 20px;
 }
 .scrollable {
-    max-height: 500px;
+    max-height: 350px;
     overflow-y: scroll;    
 }
 

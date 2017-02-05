@@ -15,13 +15,13 @@
         <div class="row">
             <div class="col-md-6">               
                 <div class="row">
-                    <div class="panel panel-default">
+                    <div class="panel panel-default"> <!--Income Information-->
                         <div class="panel-heading"><strong>Information</strong></div>
                         <div class="panel-body">
                             <div class="col-md-6">
                                 <label for="income">Income: </label>
                                 <input class="currency" size="10" name="income" type="number" data-bind="value: income">
-                                <div>
+                                <div class="small">
                                     <label for="payFeq">Pay Frequency: </label>
                                     <div style="display: inline;"><input name="payFeq" type="radio" value="weekly" data-bind="checked: payFrequency">Weekly</div>
                                     <div style="display: inline;"><input name="payFeq" type="radio" value="bi-weely" data-bind="checked: payFrequency">Bi-Weekly</div>
@@ -38,32 +38,38 @@
                             <button data-bind="click: setBudget">Set Budget</button>
                         </div>
                     </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><strong>Add New Bill</strong></div>
-                        <div class="panel-body">
-                            <div class="col-md-4">
-                                <label for="Name">Name: </label>
-                                <input size="10" name="Name" data-bind="value: bill.name">
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="DueDate">Due Date: </label>
-                                <input class="date" size="10" name="DueDate" type="date" data-bind="value: bill.dueDate">
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="Amount">Amount: </label>
-                                <input class="currency" size="10" name="Amount" type="number" data-bind="value: bill.amount">
-                            </div>
+                    <div class="panel panel-default"> <!--Weekly Reocurring Expenses-->
+                        <div class="panel-heading">
+                            <strong>Weekly Reocurring Expenses</strong>
+                            <button data-bind="click: getWeeklyExpenses">Get Expenses</button>
                         </div>
-                        <div class="panel-footer">
-                            <button data-bind="click: addBill">Add New Bill</button>
+                        <div class="panel-body scrollable">
+                            <table class="table table-responsive small">
+                                <thead>
+                                    <tr>
+                                        <td>Name</td>                                    
+                                        <td>Weekly Amount</td>
+                                        <td>Monthly Amount</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input size="10" name="Name" data-bind="value: weeklyExpense.name"></td>                                        
+                                        <td><input class="currency" size="10" name="Amount" type="number" data-bind="value: weeklyExpense.weeklyAmount"></td>
+                                        <td></td>
+                                        <td><button class="small" data-bind="click: addWeeklyExpense">Add</button></td>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="template: { name: weeklyExpenseTemplate, foreach: weeklyExpenses }"></tbody>
+                            </table>
                         </div>
+                        <div class="panel-footer"></div>
                     </div>
 
-                    <div class="panel panel-default">
+                    
+
+                    <div class="panel panel-default"> <!--Monthly Reocurring Expenses-->
                         <div class="panel-heading">
-                            <strong>Current Bills</strong>
+                            <strong>Monthly Reocurring Expenses</strong>
+                            <button data-bind="click: getBills">Get Bills</button>
                         </div>
                         <div class="panel-body scrollable">
                             <table class="table table-responsive small">
@@ -72,6 +78,12 @@
                                         <td>Name</td>
                                         <td>Due Date</td>
                                         <td>Amount</td>
+                                    </tr>
+                                    <tr>
+                                        <td><input size="10" name="Name" data-bind="value: bill.name"></td>
+                                        <td><input class="date" size="10" name="DueDate" type="date" data-bind="value: bill.dueDate"></td>
+                                        <td><input class="currency" size="10" name="Amount" type="number" data-bind="value: bill.amount"></td>
+                                        <td><button class="small" data-bind="click: addBill">Add</button></td>
                                     </tr>
                                 </thead>
                                 <tbody data-bind="foreach: bills">
@@ -84,7 +96,7 @@
                             </table>
                         </div>
                         <div class="panel-footer">
-                            <button data-bind="click: getBills">Get Bills</button>
+                            
                         </div>
                     </div>
                 </div>
@@ -111,8 +123,12 @@
                         <strong>Monthly Budget</strong>
                     </div>
                     <div class="panel-body">
-                        Total Monthly Bills: <span data-bind="text: totalMonthlyAmount"></span><br>
-                        Total Monthly Income: <span data-bind="text: monthlyIncome"></span>
+                        Total Monthly Income: <span data-bind="text: monthlyIncome"></span><br>
+                        Total Monthly Bills: <span data-bind="text: totalMonthlyBills"></span><br>                        
+                        Total Weekly Expenses Per Month:  <span data-bind="text: totalMonthlyWeeklyExpenses"></span><br>
+                        Total Montly Expenses:  <span data-bind="text: totalMonthlyExpenses"></span><br>
+                        Money left: <span data-bind="text: monthlyMoneyLeft"></span>
+                       
                     </div>
                     <div class="panel-footer">
                     
@@ -149,7 +165,7 @@
                                                 <tr>
                                                     <td data-bind="text: name"></td>
                                                     <td data-bind="text: dueDate"></td>
-                                                    <td data-bind="text: amount"></td>
+                                                    <td data-bind="text: amount"></td>                                                    
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -165,7 +181,25 @@
             </div>
         </div>
     </section>
-   
+    <script id="weeklyExpenseTmp" type="text/html">
+        <tr>
+            <td data-bind="text: name"></td>                                        
+            <td data-bind="text: weeklyAmount"></td>
+            <td data-bind="text: monthlyAmount"></td>
+            <td>
+                <button class="small" data-bind="click: $root.editItem">Edit</button>
+                <button class="main-button" data-bind="click: $root.deleteItem">Delete</button>
+            </td>
+        </tr>
+    </script>
+    <script id="editWeeklyExpenseTmp" type="text/html">
+        <tr>
+            <td data-bind="text: name"></td>                                        
+            <td><input class="currency" size="10" type="number" data-bind="value: weeklyAmount"/></td>
+            <td data-bind="text: monthlyAmount"></td>
+            <td><button class="small" data-bind="click: $root.updateExpense">Update</button></td>
+        </tr>
+    </script>
    
 
 
