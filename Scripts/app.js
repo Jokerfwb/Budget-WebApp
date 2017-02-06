@@ -127,12 +127,24 @@ var ViewModel = function () {
         self.selectedItem(itemToEdit);
     }
 
+    self.deleteItem = function(itemToDelete) {
+        var reallyDelete = confirm('If you want to delete this item select OK otherwise CANCEL');
+        if(reallyDelete) {
+            self.weeklyExpenses.remove(itemToDelete);
+            self.bills.remove(itemToDelete);
+        }
+    }
+
     self.updateExpense = function() {
         self.selectedItem(null);
     }
 
     self.weeklyExpenseTemplate = function(itemToEdit) {
         return self.selectedItem() == itemToEdit ? "editWeeklyExpenseTmp" : "weeklyExpenseTmp"; 
+    }
+
+    self.billTemplate = function(itemToEdit) {
+        return self.selectedItem() == itemToEdit ? "editBillTmp" : "billTmp";
     }
 
     self.resetForm = function () {
@@ -166,11 +178,11 @@ function weeklyExpense(data) {
     } else {
         this.name = ko.observable(data.name);
         this.weeklyAmount = ko.observable(data.weeklyAmount);
-        this.monthlyAmount = ko.computed(function() {
-                                console.log(data.weeklyAmount);
-                                var temp = data.weeklyAmount;
+        this.monthlyAmount = ko.computed(function() {                                
+                                console.log(this.weeklyAmount());
+                                var temp = this.weeklyAmount();
                                 return total = (Number(temp) * 4.4).toFixed(2);
-                            })
+                            }, this);
     }
 }
 
@@ -179,9 +191,6 @@ function weeklyBill(){
     this.weeklyBills = ko.observableArray([]);
     this.weeklyAmount = ko.observable();
 }
-
-
-
 
 function totalWeeklyBills(x) {
     var weeklyAmount = 0;
@@ -192,8 +201,8 @@ function totalWeeklyBills(x) {
 }
 
 var myExpenses = [
-    {name: 'Per Gas', weeklyAmount: '60.00'},
-    {name: 'Chrissy', weeklyAmount: '150.00'}
+    {name: 'Gas', weeklyAmount: '60.00'},
+    {name: 'Groceries', weeklyAmount: '150.00'}
 ]
 
 var myBills = [
