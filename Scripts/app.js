@@ -1,5 +1,5 @@
 
-//Test of Git
+//test
 
 var ViewModel = function () {
     var self = this;
