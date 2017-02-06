@@ -3,35 +3,79 @@
 
 var ViewModel = function () {
     var self = this;
+    self.bill = new bill();
+    self.weeklyExpense = new weeklyExpense();
+    self.selectedItem = ko.observable();
 
-    
+    //User input for expenses 
+    self.bills = ko.observableArray([]);
+    self.weeklyExpenses = ko.observableArray([]);
 
+    //User Inputed for Income
     self.income = ko.observable(0);
-    self.monthlyIncome = ko.computed(function() {
-    return ((Number(self.income()) * 52)/12).toFixed(2);
-    })
-
     self.payFrequency = ko.observable('weekly');
     self.weeklyIncome = ko.observable(670.00);
-    self.bills = ko.observableArray([]);
-    self.budget = ko.observableArray([]);
     self.weekRange = ko.observableArray([]);
     self.payDay = ko.observable("2016-12-30");
-    self.bill = new bill();
 
-    self.totalMonthlyAmount = ko.computed(function() {
-        var total = 0;
-        for (var i = 0; i < self.bills().length; i++) {
-            total = total + Number(self.bills()[i].amount());
-        }
-        return total;
-    })
-  
+    //Computered amounts based of the users input for income and inexpenses 
+    self.monthlyIncome = ko.computed(function() {
+                            var income = self.income()
+                            return ((Number(income) * 52)/12).toFixed(2);
+                        })
+    self.totalMonthlyBills = ko.computed(function() {
+                            var total = 0;
+                            var bills = self.bills();
+                            for (var i = 0; i < bills.length; i++) {
+                                total = total + Number(bills[i].amount());
+                            }
+                            return total.toFixed(2);
+                        }) 
+    self.totalMonthlyWeeklyExpenses = ko.computed(function() {
+                            var total = 0;
+                            console.log(self.weeklyExpenses());
+                            var weeklyExpenses = ko.toJS(self.weeklyExpenses())
+                            console.log(weeklyExpenses);
+                            for (var i = 0; i < weeklyExpenses.length; i++) {
+                                total = total + Number(weeklyExpenses[i].monthlyAmount);
+                            }
+                            return total.toFixed(2);
+                        })  
+    self.totalMonthlyExpenses = ko.computed(function() {
+                            var total = 0;
+                            var totalMonthlyBills = self.totalMonthlyBills();
+                            var totalMonthlyWeeklyExpenses = self.totalMonthlyWeeklyExpenses();
+                            return total = (Number(totalMonthlyBills) + Number(totalMonthlyWeeklyExpenses)).toFixed(2);
+                        })
+    self.monthlyMoneyLeft = ko.computed(function() {
+                            var total = 0
+                            var monthlyIncome = self.monthlyIncome();
+                            var totalMonthlyExpenses = self.totalMonthlyExpenses();
+                            return total = (monthlyIncome - totalMonthlyExpenses).toFixed(2);
+                        })
+    
+    self.budget = ko.observableArray([]);
+
     self.addBill = function () {
         var x = ko.toJS(self.bill);
         self.bills.push(new bill(x));
         console.log(self.bills());
         self.resetForm();        
+    }
+
+    self.addWeeklyExpense = function() {
+        var x = ko.toJS(self.weeklyExpense);
+        self.weeklyExpenses.push(new weeklyExpense(x));
+        console.log(self.weeklyExpenses());
+        self.resetForm();
+    }
+
+    //Will enentrually be a call to a server for the information
+    self.getWeeklyExpenses = function () {
+        for (var i = 0; i < myExpenses.length; i++) {
+            var x = new weeklyExpense(myExpenses[i]);
+            self.weeklyExpenses.push(x);
+        }
     }
 
     self.getBills = function () {
@@ -76,25 +120,69 @@ var ViewModel = function () {
             self.budget.push(thisWeeksBill);             
                     
         }
-        console.log(ko.toJS(self.budget()));
+        console.log(self.budget());
+    }
+
+    self.editItem = function(itemToEdit) {
+        self.selectedItem(itemToEdit);
+    }
+
+    self.deleteItem = function(itemToDelete) {
+        var reallyDelete = confirm('If you want to delete this item select OK otherwise CANCEL');
+        if(reallyDelete) {
+            self.weeklyExpenses.remove(itemToDelete);
+            self.bills.remove(itemToDelete);
+        }
+    }
+
+    self.updateExpense = function() {
+        self.selectedItem(null);
+    }
+
+    self.weeklyExpenseTemplate = function(itemToEdit) {
+        return self.selectedItem() == itemToEdit ? "editWeeklyExpenseTmp" : "weeklyExpenseTmp"; 
+    }
+
+    self.billTemplate = function(itemToEdit) {
+        return self.selectedItem() == itemToEdit ? "editBillTmp" : "billTmp";
     }
 
     self.resetForm = function () {
-        self.bill.name(" ")
-        self.bill.dueDate("2017-01-01")
+        self.bill.name(" ");
+        self.bill.dueDate("2017-01-01");
         self.bill.amount(" ");
+        self.weeklyExpense.name(" ");
+        self.weeklyExpense.weeklyAmount(" ");
     }
 }
 
+
+//Data Functions
 function bill (data) {
     if(!data){
         this.name = ko.observable();
         this.dueDate = ko.observable('2017-01-01');
-        this.amount = ko.observable();
+        this.amount = ko.observable('0.00');
     } else {
         this.name = ko.observable(data.name);
         this.dueDate = ko.observable(data.dueDate);
         this.amount = ko.observable(data.amount);
+    }
+}
+
+function weeklyExpense(data) {
+    if(!data){
+        this.name = ko.observable();
+        this.weeklyAmount =ko.observable('0.00');
+        this.monthlyAmount = ko.observable('0.00');
+    } else {
+        this.name = ko.observable(data.name);
+        this.weeklyAmount = ko.observable(data.weeklyAmount);
+        this.monthlyAmount = ko.computed(function() {                                
+                                console.log(this.weeklyAmount());
+                                var temp = this.weeklyAmount();
+                                return total = (Number(temp) * 4.4).toFixed(2);
+                            }, this);
     }
 }
 
@@ -104,10 +192,6 @@ function weeklyBill(){
     this.weeklyAmount = ko.observable();
 }
 
-// function monthlyBudget() {
-//     this.totalMonthlyAmount = ko.observalbe()
-// }
-
 function totalWeeklyBills(x) {
     var weeklyAmount = 0;
     for(var i = 0; i < x.weeklyBills().length; i++) {
@@ -115,6 +199,11 @@ function totalWeeklyBills(x) {
     }
     return weeklyAmount
 }
+
+var myExpenses = [
+    {name: 'Gas', weeklyAmount: '60.00'},
+    {name: 'Groceries', weeklyAmount: '150.00'}
+]
 
 var myBills = [
     { name: 'Rent', dueDate: '2017-01-05', amount: '1100.00' },
