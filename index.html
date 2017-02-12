@@ -13,7 +13,7 @@
     <section class="container-fluid">
 
         <div class="row">
-            <div class="col-md-6">               
+            <div class="col-sm-6">               
                 <div class="row">
                     <div class="panel panel-default"> <!--Income Information-->
                         <div class="panel-heading">
@@ -23,7 +23,7 @@
                         </div>
                         <div id="collapse1" class="panel-collapse collapse in" >
                             <div class="panel-body">
-                                <div class="col-md-6">
+                                <div class="col-sm-6">
                                     <label for="income">Income: </label>
                                     <input class="currency" size="10" name="income" type="number" data-bind="value: income">
                                     <div class="small">
@@ -33,7 +33,7 @@
                                         <div style="display: inline;"><input name="payFeq" type="radio" value="monthly" data-bind="checked: payFrequency">Monthly</div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-sm-6">
                                     <label for="payDate">Next Pay Date:</label>
                                     <input class="date" size="10" name="payDate" type="date" data-bind="value: payDay">
                                     <button data-bind="click: getWeekRange">Week Range</button>
@@ -106,7 +106,7 @@
 
             </div>
 
-            <div class="col-md-6">
+            <div class="col-sm-6">
                 <!--<div class="panel panel-default">
                     <div class="panel-heading">
                         
@@ -117,69 +117,37 @@
                     <div class="panel-footer">
                        
                     </div>
-                </div>-->
-
-                <section data-bind="foreach: budget">
-                    <div class="panel panel-default" >
-                        <div class="panel-heading">
-                            <strong data-bind="text: startOfWeek"></strong>
-                            <span data-bind="text: weeklyAmount"></span>
-                        </div>
-                        <div class="panel-body">
-
-                            <table class="table table-responsive small">
-                                <thead>
-                                    <tr>
-                                        <td>Name</td>
-                                        <td>Due Date</td>
-                                        <td>Amount</td>
-                                    </tr>
-                                </thead>
-                                <tbody data-bind="foreach: weeklyBills">
-                                    <tr>
-                                        <td data-bind="text: name"></td>
-                                        <td data-bind="text: dueDate"></td>
-                                        <td data-bind="text: amount"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="panel-footer">
-                            <span>Testing footer</span>
-                        </div>
-                    </div>
-                </section>
-
-
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <strong>Monthly Budget</strong>
-                    </div>
-                    <div class="panel-body">
-                        Total Monthly Bills: <span data-bind="text: totalMonthlyAmount"></span><br>
-                        Total Monthly Income: <span data-bind="text: monthlyIncome"></span>
-                    </div>
-                    <div class="panel-footer">
-                    
-                    </div>
-                    </div>
+                </div>-->               
 
                 <div class="panel panel-default"><!--Monthly Budget Area-->
                     <div class="panel-heading">
                         <strong>Monthly Budget</strong>
                     </div>
                     <div class="panel-body">
-                        Total Monthly Income: <span data-bind="text: monthlyIncome"></span><br>
-                        Total Monthly Bills: <span data-bind="text: totalMonthlyBills"></span><br>                        
-                        Total Weekly Expenses Per Month:  <span data-bind="text: totalMonthlyWeeklyExpenses"></span><br>
-                        Total Montly Expenses:  <span data-bind="text: totalMonthlyExpenses"></span><br>
-                        Money left: <span data-bind="text: monthlyMoneyLeft"></span>
-                       
+                        <table class="table table-responsive table-bordered">
+                            <thead>
+                                <tr class="small text-center text-bold">
+                                    <td>Total Monthly Income</td>
+                                    <td>Total Monthly Bills</td>
+                                    <td>Total Weekly Expenses Per Month</td>
+                                    <td>Total Montly Expenses</td>
+                                    <td>Money Left</td>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr class="text-center text-bold">
+                                    <td class="income"  data-bind="text: monthlyIncome"></td>
+                                    <td class="outFlow" data-bind="text: totalMonthlyBills"></td>
+                                    <td class="outFlow" data-bind="text: totalMonthlyWeeklyExpenses"></td>
+                                    <td class="outFlow" data-bind="text: totalMonthlyExpenses"></td>
+                                    <td data-bind="text: monthlyMoneyLeft, css: moneyStatus()"></td>
+                                </tr>
+                            </tbody>
+                        </table>                                              
                     </div>
-                    <div class="panel-footer">
-                    
-                    </div>
-                    </div>
+                    <div class="panel-footer"> </div>
+                </div>
 
                 <div class="panel panel-default"><!--Weekly Budget Area-->
                     <div class="panel-heading">
@@ -220,9 +188,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="panel-footer">
-
-                    </div>
+                    <div class="panel-footer"></div>
                 </div>                
             </div>
         </div>

@@ -13,3 +13,15 @@ body {
 .date {
     width: 135px;
 }
+
+.income {
+    color: green;
+}
+
+.outFlow {
+    color: red;
+}
+
+.text-bold {
+    font-weight: bold;
+}

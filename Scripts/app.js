@@ -17,6 +17,7 @@ var ViewModel = function () {
     self.weeklyIncome = ko.observable(670.00);
     self.weekRange = ko.observableArray([]);
     self.payDay = ko.observable("2016-12-30");
+    
 
     //Computered amounts based of the users input for income and inexpenses 
     self.monthlyIncome = ko.computed(function() {
@@ -32,10 +33,8 @@ var ViewModel = function () {
                             return total.toFixed(2);
                         }) 
     self.totalMonthlyWeeklyExpenses = ko.computed(function() {
-                            var total = 0;
-                            console.log(self.weeklyExpenses());
-                            var weeklyExpenses = ko.toJS(self.weeklyExpenses())
-                            console.log(weeklyExpenses);
+                            var total = 0;                            
+                            var weeklyExpenses = ko.toJS(self.weeklyExpenses())                            
                             for (var i = 0; i < weeklyExpenses.length; i++) {
                                 total = total + Number(weeklyExpenses[i].monthlyAmount);
                             }
@@ -55,6 +54,9 @@ var ViewModel = function () {
                         })
     
     self.budget = ko.observableArray([]);
+    self.moneyStatus = ko.computed(function (data) {
+        return self.monthlyMoneyLeft() < 0 ? "outFlow" : "income";
+    })
 
     self.addBill = function () {
         var x = ko.toJS(self.bill);
@@ -98,7 +100,7 @@ var ViewModel = function () {
 
     self.setBudget = function () {
         self.budget.removeAll();
-        console.log(self.bills());
+        
         for (var i = 0; i < self.weekRange().length; i++) {            
             var weekOf = self.weekRange()[i];
             var startDate = moment(weekOf);
@@ -121,6 +123,12 @@ var ViewModel = function () {
                     
         }
         console.log(self.budget());
+    }
+    self.setBudget = function () {
+        self.budget.removeAll()
+        console.log(ko.toJS(self.bills()));
+        console.log(ko.toJS(self.weeklyExpenses()));
+        console.log(ko.toJS(self.payDay()))
     }
 
     self.editItem = function(itemToEdit) {
@@ -186,6 +194,7 @@ function weeklyExpense(data) {
     }
 }
 
+
 function weeklyBill(){
     this.startOfWeek = ko.observable();
     this.weeklyBills = ko.observableArray([]);
@@ -193,7 +202,7 @@ function weeklyBill(){
 }
 
 function totalWeeklyBills(x) {
-    var weeklyAmount = 0;
+    var weeklyAmount = 460.00;
     for(var i = 0; i < x.weeklyBills().length; i++) {
         weeklyAmount += Number(x.weeklyBills()[i].amount());
     }
@@ -207,15 +216,18 @@ var myExpenses = [
 
 var myBills = [
     { name: 'Rent', dueDate: '2017-01-05', amount: '1100.00' },
-    { name: 'Electric', dueDate: '2017-01-06', amount: '150.00' },
+    { name: 'Electric', dueDate: '2017-01-06', amount: '180.00' },
     { name: 'Internet', dueDate: '2017-01-29', amount: '45.00' },
     { name: 'Car Insurance', dueDate: '2017-01-03', amount: '145.00' },
     { name: 'Cell Phone', dueDate: '2017-01-21', amount: '193.00' },
     { name: 'Water', dueDate: '2017-01-21', amount: '20.00' },
-    { name: 'Netflix', dueDate: '2017-01-03', amount: '13.00' },
+    { name: 'Netflix', dueDate: '2017-01-03', amount: '13.06' },
     { name: 'Fairwinds Credit Card', dueDate: '2017-01-17', amount: '40.00' },
     { name: 'Amazon Credit Card', dueDate: '2017-01-19', amount: '25.00' },
-    { name: 'Bealls Credit Card', dueDate: '2017-01-19', amount: '25.00' }
+    { name: 'Bealls Credit Card', dueDate: '2017-01-19', amount: '25.00' },
+    { name: 'Title Loan', dueDate: '2017-01-02', amount: '170.00' },
+    { name: 'Planet Fitness', dueDate: '2017-010--17', amount: '10.65' },
+    { name: 'Chrissys Bags', dueDate: '2017-01-02', amount: '20.00' }
 ]
 
 ko.applyBindings(new ViewModel());
