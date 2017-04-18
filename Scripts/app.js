@@ -16,7 +16,9 @@ var ViewModel = function () {
     self.payFrequency = ko.observable('weekly');
     self.weeklyIncome = ko.observable(670.00);
     self.weekRange = ko.observableArray([]);
-    self.payDay = ko.observable("2016-12-30");
+    self.payDay = ko.observable();
+    self.dayOptions = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    
     
 
     //Computered amounts based of the users input for income and inexpenses 
@@ -98,37 +100,40 @@ var ViewModel = function () {
         console.log(self.weekRange());
     }
 
-    self.setBudget = function () {
-        self.budget.removeAll();
+    // self.setBudget = function () {
+    //     self.budget.removeAll();
         
-        for (var i = 0; i < self.weekRange().length; i++) {            
-            var weekOf = self.weekRange()[i];
-            var startDate = moment(weekOf);
-            var endDate = moment(self.weekRange()[i + 1]);
+    //     for (var i = 0; i < self.weekRange().length; i++) {            
+    //         var weekOf = self.weekRange()[i];
+    //         var startDate = moment(weekOf);
+    //         var endDate = moment(self.weekRange()[i + 1]);
 
-            var thisWeeksBill = new weeklyBill();
-            thisWeeksBill.startOfWeek(weekOf);       
+    //         var thisWeeksBill = new weeklyBill();
+    //         thisWeeksBill.startOfWeek(weekOf);       
         
-            for (var j = 0; j < self.bills().length; j++) {
-                var date = moment(self.bills()[j].dueDate());
+    //         for (var j = 0; j < self.bills().length; j++) {
+    //             var date = moment(self.bills()[j].dueDate());
                 
-                if (date.isBetween(startDate, endDate, null, '[)')) {  
-                    var jsBill= ko.toJS(self.bills()[j]);
-                    thisWeeksBill.weeklyBills.push(new bill(jsBill));                   
-                    self.bills()[j].dueDate(date.add(1, 'months').format("YYYY-MM-DD"))                     
-                }
-            }
-            thisWeeksBill.weeklyAmount(totalWeeklyBills(thisWeeksBill));
-            self.budget.push(thisWeeksBill);             
+    //             if (date.isBetween(startDate, endDate, null, '[)')) {  
+    //                 var jsBill= ko.toJS(self.bills()[j]);
+    //                 thisWeeksBill.weeklyBills.push(new bill(jsBill));                   
+    //                 self.bills()[j].dueDate(date.add(1, 'months').format("YYYY-MM-DD"))                     
+    //             }
+    //         }
+    //         thisWeeksBill.weeklyAmount(totalWeeklyBills(thisWeeksBill));
+    //         self.budget.push(thisWeeksBill);             
                     
-        }
-        console.log(self.budget());
-    }
+    //     }
+    //     console.log(self.budget());
+    // }
     self.setBudget = function () {
         self.budget.removeAll()
-        console.log(ko.toJS(self.bills()));
-        console.log(ko.toJS(self.weeklyExpenses()));
-        console.log(ko.toJS(self.payDay()))
+        // console.log(ko.toJS(self.bills()));
+        // console.log(ko.toJS(self.weeklyExpenses()));
+        // console.log(ko.toJS(self.payDay()))
+
+         //Get Current Date
+        setPlan(self.payDay());
     }
 
     self.editItem = function(itemToEdit) {
@@ -161,6 +166,8 @@ var ViewModel = function () {
         self.bill.amount(" ");
         self.weeklyExpense.name(" ");
         self.weeklyExpense.weeklyAmount(" ");
+
+       
     }
 }
 
@@ -171,10 +178,12 @@ function bill (data) {
         this.name = ko.observable();
         this.dueDate = ko.observable('2017-01-01');
         this.amount = ko.observable('0.00');
+        this.dayDue = ko.observable();
     } else {
         this.name = ko.observable(data.name);
         this.dueDate = ko.observable(data.dueDate);
         this.amount = ko.observable(data.amount);
+        this.dayDue = ko.observable(moment(data.dueDate, 'YYYY-MM-DD').format('DD'));
     }
 }
 
@@ -207,6 +216,37 @@ function totalWeeklyBills(x) {
         weeklyAmount += Number(x.weeklyBills()[i].amount());
     }
     return weeklyAmount
+}
+
+function setPlan(payDay) {
+    // console.log(moment().format("YYYY-MM-DD"));
+    // console.log(moment().startOf('week').format('DD'));
+    // console.log(moment().startOf('week').format('YYYY-MM-DD'));
+    // console.log(moment().diff(moment().startOf('week'),'days'));
+    console.log(moment(payDay, 'dddd').day());
+    console.log(moment().day());
+    //console.log(moment().day(moment().day() >= 5 ? 5 : -2).format("YYYY-MM-DD"));
+    var todaysIndex = moment().day();
+    var payDayIndex = moment(payDay, 'dddd').day();
+
+    var temp = payDayIndex - todaysIndex;
+    if (temp < 0) {temp = 7 + temp;}
+    var payDayDate = moment().add(temp, 'days').format('YYYY-MM-DD');
+    console.log('Next pay day date is:   ' + payDayDate);
+    console.log('Previous pay day is:    ' + moment(payDayDate).subtract(7, 'days').format('YYYY-MM-DD'));
+
+    // getPayDayDate() {
+    //     this.todaysDate = new Date(this.year, this.month-1, this.day);
+    //     this.payDayDate = this.todaysDate;
+        
+    //     this.todaysDayOfWeekIndex = this.todaysDate.getDay();
+    //     this.todaysDayOfWeek = this.daysOfWeek[this.todaysDayOfWeekIndex];
+
+    //     var temp = this.payDayIndex - this.todaysDayOfWeekIndex;
+
+    //     if  (temp < 0) {temp = 7+temp; }
+    //     this.payDayDate.setDate(this.todaysDate.getDate() + temp);    
+    // }
 }
 
 var myExpenses = [

@@ -35,7 +35,8 @@
                                 </div>
                                 <div class="col-sm-6">
                                     <label for="payDate">Next Pay Date:</label>
-                                    <input class="date" size="10" name="payDate" type="date" data-bind="value: payDay">
+                                    <!--<input class="date" size="10" name="payDate" type="date" data-bind="value: payDay">-->
+                                    <select id="PayDay" data-bind="options: dayOptions, value: payDay, optionsCaption: 'Choose Pay Day'"></select>
                                     <button data-bind="click: getWeekRange">Week Range</button>
                                 </div>
                             </div>
